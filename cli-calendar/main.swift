@@ -25,35 +25,60 @@ func requestCalendarAccess(completion: @escaping (Bool) -> Void) {
     }
 }
 
-func listEvents() {
+func listEvents(today: Bool) {
     let calendars = eventStore.calendars(for: .event)
 
-    let now = Date()
-    let oneYearFromNow = Calendar.current.date(byAdding: .year, value: 1, to: now)!
+    let startDate = Date()
+    var endDate = Date()
+
+    if today == true {
+        endDate = Calendar.current.date(
+            bySettingHour: 23, minute: 23, second: 23, of: startDate)!
+    } else {
+        endDate = Calendar.current.date(byAdding: .year, value: 1, to: startDate)!
+    }
 
     let predicate = eventStore.predicateForEvents(
-        withStart: now, end: oneYearFromNow, calendars: calendars)
+        withStart: startDate, end: endDate, calendars: calendars)
     let events = eventStore.events(matching: predicate)
 
     if events.isEmpty {
         print("No events found.")
     } else {
         for event in events {
-            print("📅 \(event.title ?? "No Title") at \(event.startDate)")
+            print(
+                "📅 \(event.title ?? "No Title") at \(event.startDate.formatted(date: .abbreviated, time: .shortened))"
+            )
         }
     }
 }
 
-requestCalendarAccess { granted in
-    if granted {
-        listEvents()
-        // Keep the program alive long enough for async operations
-        CFRunLoopStop(CFRunLoopGetMain())
-    } else {
-        print("Access to calendar was not granted.")
-        CFRunLoopStop(CFRunLoopGetMain())
+func handleCommand(arguments: [String]) {
+    guard arguments.count > 1 else {
+        print("Usage: calendarcli <command>")
+        print("Commands: list")
+        return
+    }
+
+    let command = arguments[1]
+    let options = Array(arguments.dropFirst(2))
+    requestCalendarAccess { granted in
+        if granted {
+            switch command {
+            case "list":
+                let today = options.contains("--today")
+                listEvents(today: today)
+            default:
+                print("Unknown command: \(command)")
+            }
+            CFRunLoopStop(CFRunLoopGetMain())
+        } else {
+            print("Access to calendar was not granted.")
+            CFRunLoopStop(CFRunLoopGetMain())
+        }
     }
 }
 
+// Start here
+handleCommand(arguments: CommandLine.arguments)
 CFRunLoopRun()
-
