@@ -3,10 +3,22 @@ import EventKit
 import Foundation
 
 @main
-struct calendarCli: ParsableCommand {
-    @Flag(help: "Display only today events.")
-    var today = false
+struct CLI: ParsableCommand {
+    static let configuration = CommandConfiguration(
+        abstract: "A CLI with multiple subcommands.",
+        subcommands: [List.self]
+    )
+}
 
-    @Argument(help: "Command.")
-    var command: String
+struct List: ParsableCommand {
+    static let configuration = CommandConfiguration(
+        abstract: "Lists user events."
+    )
+
+    @Flag(name: .shortAndLong, help: "Lists only today events.")
+    var option: Bool = false
+
+    func run() throws {
+        print("Today only")
+    }
 }
