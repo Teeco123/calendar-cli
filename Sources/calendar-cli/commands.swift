@@ -12,9 +12,12 @@ struct List: ParsableCommand {
   @Option(name: .shortAndLong, help: "Number of days to list.")
   var days: Int = 7
 
+  @Option(name: .shortAndLong, help: "Calendar to view events from")
+  var calendar: Int? = nil
+
   func run() throws {
     let eventManager = EventManager()
-    try eventManager.listEvents(today, days)
+    try eventManager.listEvents(today, days, calendar)
   }
 }
 

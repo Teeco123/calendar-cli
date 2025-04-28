@@ -4,7 +4,7 @@ import Foundation
 class EventManager {
   let eventStore = EKEventStore()
 
-  func listEvents(_ today: Bool, _ days: Int) throws {
+  func listEvents(_ today: Bool, _ days: Int, _ calendar: Int?) throws {
     guard try requestAccess(eventStore) else { return }
 
     let startDate = Date()
@@ -15,10 +15,25 @@ class EventManager {
       endDate = Calendar.current.date(byAdding: .day, value: days, to: startDate)!
     }
 
-    let predicate = eventStore.predicateForEvents(
-      withStart: startDate, end: endDate, calendars: nil)
-    let events = eventStore.events(matching: predicate)
+    var predicate: NSPredicate
+    if calendar != nil {
+      let calendars = fetchCalendars()
 
+      if let foundIndex = calendars.first(where: { $0.id == Int(calendar!) }) {
+        let calendars: [EKCalendar] = [foundIndex.calendar]
+
+        predicate = eventStore.predicateForEvents(
+          withStart: startDate, end: endDate, calendars: calendars)
+      } else {
+        print("Select valid calendar. Please try again.")
+        return
+      }
+    } else {
+      predicate = eventStore.predicateForEvents(
+        withStart: startDate, end: endDate, calendars: nil)
+    }
+
+    let events = eventStore.events(matching: predicate)
     displayEvents(events)
   }
 
