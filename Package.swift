@@ -4,6 +4,9 @@ import PackageDescription
 
 let package = Package(
     name: "calendar-cli",
+    platforms: [
+        .macOS(.v15)
+    ],
     products: [
         .executable(name: "calendar-cli", targets: ["calendar-cli"])
     ],
@@ -15,7 +18,7 @@ let package = Package(
             name: "calendar-cli",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser")
-            ]
+            ],
         )
     ]
 )
