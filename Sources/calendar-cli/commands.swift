@@ -11,7 +11,7 @@ struct List: ParsableCommand {
 
   func run() throws {
     let eventManager = EventManager()
-    try eventManager.listTodayEvents(today: today)
+    try eventManager.listEvents(today: today)
   }
 }
 
