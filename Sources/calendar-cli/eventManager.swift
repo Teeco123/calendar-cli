@@ -4,7 +4,7 @@ import Foundation
 class EventManager {
   let eventStore = EKEventStore()
 
-  func listEvents(today: Bool) throws {
+  func listEvents(_ today: Bool, _ days: Int) throws {
     guard try requestAccess(eventStore) else { return }
 
     let startDate = Date()
@@ -12,7 +12,7 @@ class EventManager {
     if today {
       endDate = Calendar.current.date(byAdding: .day, value: 1, to: startDate)!
     } else {
-      endDate = Calendar.current.date(byAdding: .day, value: 7, to: startDate)!
+      endDate = Calendar.current.date(byAdding: .day, value: days, to: startDate)!
     }
 
     let predicate = eventStore.predicateForEvents(
