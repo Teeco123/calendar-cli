@@ -32,3 +32,48 @@ func promptForCalendar(_ eventStore: EKEventStore) -> EKCalendar {
     }
 
 }
+
+extension EKCalendarType {
+    var displayName: String {
+        switch self {
+        case .local: return "Local"
+        case .calDAV: return "CalDAV"
+        case .exchange: return "Exchange"
+        case .subscription: return "Subscription"
+        case .birthday: return "Birthday"
+        @unknown default: return "Unknown"
+        }
+    }
+}
+
+extension EKCalendarEventAvailabilityMask {
+    var displayNames: String {
+        var names: [String] = []
+        if contains(.busy) {
+            names.append("Busy")
+        }
+        if contains(.free) {
+            names.append("Free")
+        }
+        if contains(.tentative) {
+            names.append("Tentative")
+        }
+        if contains(.unavailable) {
+            names.append("Unavailable")
+        }
+        if names.isEmpty {
+            names.append("None")
+        }
+        return names.joined(separator: ", ")
+    }
+}
+
+func detailedCalendarDisplay(_ calendar: MyCalendar) {
+    print("📅 \(calendar.calendar.title)")
+    print("   ID: \(calendar.id)")
+    print("   Title: \(calendar.calendar.title)")
+    print("   Type: \(calendar.calendar.type.displayName)")
+    print("   Is immutable: \(calendar.calendar.isImmutable)")
+    print("   Availabilities: \(calendar.calendar.supportedEventAvailabilities.displayNames)")
+    print("------------------------------")
+}
