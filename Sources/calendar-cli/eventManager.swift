@@ -17,7 +17,7 @@ class EventManager {
 
         var predicate: NSPredicate
         if calendar != nil {
-            let calendars = fetchCalendars()
+            let calendars = fetchCalendars(eventStore)
 
             if let foundIndex = calendars.first(where: { $0.id == Int(calendar!) }) {
                 let calendars: [EKCalendar] = [foundIndex.calendar]
@@ -42,7 +42,7 @@ class EventManager {
         let newEvent = EKEvent(eventStore: eventStore)
 
         newEvent.title = promptForEventName()
-        newEvent.calendar = promptForCalendar()
+        newEvent.calendar = promptForCalendar(eventStore)
         newEvent.startDate = Date()
         newEvent.endDate = Date()
 
