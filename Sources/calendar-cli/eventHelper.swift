@@ -83,11 +83,9 @@ extension EventManager {
         let calendars = eventStore.calendars(for: .event)
         var arr: [MyCalendar] = []
 
-        var i = 1
-        for calendar in calendars {
-            let cal = MyCalendar(id: i, calendar: calendar)
+        for (index, calendar) in calendars.enumerated() {
+            let cal = MyCalendar(id: index + 1, calendar: calendar)
             arr.append(cal)
-            i += 1
         }
         return arr
     }
