@@ -6,7 +6,7 @@ extension EventManager {
         let semaphore = DispatchSemaphore(value: 0)
         var accessGranted = false
 
-        eventStore.requestAccess(to: .event) { granted, _ in
+        eventStore.requestFullAccessToEvents { granted, _ in
             accessGranted = granted
             semaphore.signal()
         }
