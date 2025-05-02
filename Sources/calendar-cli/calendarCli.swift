@@ -37,9 +37,12 @@ struct CalendarsList: ParsableCommand {
         abstract: "Lists all calendars."
     )
 
+    @Option(name: .shortAndLong, help: ArgumentHelp("Type of calendar to list.", valueName: "type"))
+    var type: CalendarsTypeSearch?
+
     func run() throws {
         let calendarsManager = CalendarsManager()
-        try calendarsManager.listCalendars()
+        try calendarsManager.listCalendars(type)
     }
 }
 
