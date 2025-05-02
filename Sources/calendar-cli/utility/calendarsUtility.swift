@@ -1,6 +1,16 @@
 import EventKit
 import Foundation
 
+func fetchCalendars(_ eventStore: EKEventStore) -> [MyCalendar] {
+    let calendars = eventStore.calendars(for: .event)
+    var arr: [MyCalendar] = []
+
+    for (index, calendar) in calendars.enumerated() {
+        let cal = MyCalendar(id: index + 1, calendar: calendar)
+        arr.append(cal)
+    }
+    return arr
+}
 func promptForCalendar(_ eventStore: EKEventStore) -> EKCalendar {
     print("Creating new event (Step 2 of ?)")
     print("Choose your calendar number: ")
@@ -21,15 +31,4 @@ func promptForCalendar(_ eventStore: EKEventStore) -> EKCalendar {
         return promptForCalendar(eventStore)
     }
 
-}
-
-func fetchCalendars(_ eventStore: EKEventStore) -> [MyCalendar] {
-    let calendars = eventStore.calendars(for: .event)
-    var arr: [MyCalendar] = []
-
-    for (index, calendar) in calendars.enumerated() {
-        let cal = MyCalendar(id: index + 1, calendar: calendar)
-        arr.append(cal)
-    }
-    return arr
 }
