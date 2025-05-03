@@ -13,7 +13,7 @@ func promptForEventName() -> String? {
 
 func promptDay() -> String? {
 
-    print("Enter starting day of event: ")
+    print("Enter day: ")
     guard let input = readLine(), !input.isEmpty else {
         print("Day cannot be empty. Please try again.")
         return promptDay()
@@ -28,7 +28,7 @@ func promptDay() -> String? {
 
 func promptMonth() -> String? {
 
-    print("Enter starting month of event: ")
+    print("Enter month: ")
     guard let input = readLine(), !input.isEmpty else {
         print("Month cannot be empty. Please try again.")
         return promptMonth()
@@ -43,7 +43,7 @@ func promptMonth() -> String? {
 
 func promptYear() -> String? {
 
-    print("Enter starting year of event: ")
+    print("Enter year: ")
     guard let input = readLine(), !input.isEmpty else {
         print("Year cannot be empty. Please try again.")
         return promptYear()
@@ -56,25 +56,75 @@ func promptYear() -> String? {
     return input
 }
 
-func promptForDate() -> Date {
+func promptHour() -> String? {
+    print("Enter hour: ")
+    guard let input = readLine(), !input.isEmpty else {
+        print("Hour cannot be empty. Please try again.")
+        return promptHour()
+    }
+
+    guard regexMatch(input, "^(0?[1-9]|1[0-2])$") else {
+        print("Input does not match pattern")
+        return promptHour()
+    }
+    return input
+}
+
+func promptMinutes() -> String? {
+    print("Enter minutes: ")
+    guard let input = readLine(), !input.isEmpty else {
+        print("Mintes cannot be empty. Please try again.")
+        return promptMinutes()
+    }
+
+    guard regexMatch(input, "^[0-5][0-9]$") else {
+        print("Input does not match pattern")
+        return promptMinutes()
+    }
+    return input
+}
+
+func promptAmPm() -> String? {
+    print("Is event PM or AM: ")
+    guard let input = readLine(), !input.isEmpty else {
+        print("This cannot be empty. Please try again.")
+        return promptAmPm()
+    }
+
+    guard regexMatch(input, "^(AM|PM|am|pm)$") else {
+        print("Input does not match pattern")
+        return promptAmPm()
+    }
+    return input
+}
+
+func promptForDate(isStarting: Bool) -> Date {
     print("Creating new event (Step 3 of ?)")
+    if isStarting {
+        print("Input starting date")
+    } else {
+        print("Input ending date")
+    }
 
     let day = promptDay()
     let month = promptMonth()
     let year = promptYear()
 
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "d-MMM-yyyy h:mm a"
+    let hour = promptHour()
+    let minutes = promptMinutes()
+    let ampm = promptAmPm()
 
-    let dateString = day! + "-" + month! + "-" + year!
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "d-MM-yyyy hh:mm a"
+
+    let dateString = day! + "-" + month! + "-" + year! + " " + hour! + ":" + minutes! + " " + ampm!
 
     guard let date = dateFormatter.date(from: dateString) else {
         print("Date is nil")
         return Date()
     }
 
-    print(date)
-    return Date()
+    return date
 }
 
 func displayEvents(_ events: [EKEvent]) {
