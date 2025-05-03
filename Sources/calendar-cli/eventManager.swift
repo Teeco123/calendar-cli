@@ -43,7 +43,7 @@ class EventManager {
 
         newEvent.title = promptForEventName()
         newEvent.calendar = promptForCalendar(eventStore)
-        newEvent.startDate = Date()
+        newEvent.startDate = promptForDate()
         newEvent.endDate = Date()
 
         try eventStore.save(newEvent, span: .thisEvent, commit: true)

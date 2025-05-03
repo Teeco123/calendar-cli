@@ -18,3 +18,23 @@ func requestAccess(_ eventStore: EKEventStore) throws -> Bool {
     }
     return true
 }
+
+func createRegex(_ pattern: String) throws -> NSRegularExpression {
+    return try NSRegularExpression(
+        pattern: pattern,
+        options: [.caseInsensitive]
+    )
+}
+
+func regexMatch(_ input: String, _ pattern: String) -> Bool {
+    do {
+        let regex = try createRegex(pattern)
+
+        let range = NSRange(location: 0, length: input.count)
+        let matches = regex.matches(in: input, options: [], range: range)
+        return matches.first != nil
+    } catch {
+        print("Failed to create regex: \(error.localizedDescription)")
+        return true
+    }
+}

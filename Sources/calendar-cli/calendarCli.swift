@@ -6,7 +6,7 @@ import Foundation
 struct CalendarCli: ParsableCommand {
     static let configuration = CommandConfiguration(
         abstract: "A CLI with multiple subcommands.",
-        subcommands: [EventsList.self, CalendarsList.self, Create.self]
+        subcommands: [EventsList.self, EventCreate.self, CalendarsList.self]
     )
 }
 
@@ -32,6 +32,17 @@ struct EventsList: ParsableCommand {
     }
 }
 
+struct EventCreate: ParsableCommand {
+    static let configuration = CommandConfiguration(
+        abstract: "Creates new event."
+    )
+
+    func run() throws {
+        let eventManager = EventManager()
+        try eventManager.createNewEvent()
+    }
+}
+
 struct CalendarsList: ParsableCommand {
     static let configuration = CommandConfiguration(
         abstract: "Lists all calendars."
@@ -48,16 +59,5 @@ struct CalendarsList: ParsableCommand {
     func run() throws {
         let calendarsManager = CalendarsManager()
         try calendarsManager.listCalendars(type, detailed)
-    }
-}
-
-struct Create: ParsableCommand {
-    static let configuration = CommandConfiguration(
-        abstract: "Creates new event."
-    )
-
-    func run() throws {
-        let eventManager = EventManager()
-        try eventManager.createNewEvent()
     }
 }
